@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" name="Default" comment="">
-      <change type="DELETED" beforePath="D:\Programs\Ruby\RDFLanguageProject\readme.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="D:\Programs\Ruby\RDFLanguageProject\TokenQueue.rb" afterPath="$PROJECT_DIR$/Code/TokenQueue.rb" />
     </list>
     <ignored path="RDFLanguageProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,9 +32,9 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="TokenQueue.rb" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/TokenQueue.rb">
+        <entry file="file://$PROJECT_DIR$/Code/TokenQueue.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="5" selection-start="99" selection-end="99" vertical-scroll-proportion="0.17894737">
+            <state line="5" column="17" selection-start="94" selection-end="94" vertical-scroll-proportion="0.1491228">
               <folding />
             </state>
           </provider>
@@ -114,6 +113,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RDFLanguageProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RDFLanguageProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Code" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -126,6 +139,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Programs\Ruby\RDFLanguageProject\Code" />
+    </key>
   </component>
   <component name="RunManager" selected="Ruby.TokenQueue">
     <configuration default="false" name="TokenQueue" type="RubyRunConfigurationType" factoryName="Ruby" temporary="true">
@@ -140,7 +158,7 @@
       <EXTENSION ID="JRubyRunConfigurationExtension" />
       <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
       <EXTENSION ID="org.jetbrains.plugins.ruby.motion.run.MotionSimulatorRunExtension" />
-      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$PROJECT_DIR$/TokenQueue.rb" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="D:\Programs\Ruby\RDFLanguageProject\Code\TokenQueue.rb" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
       <RunnerSettings RunnerId="RubyRunner" />
       <ConfigurationWrapper RunnerId="RubyRunner" />
@@ -247,14 +265,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="10" y="0" width="1900" height="1032" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295838" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.6704162" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.6704162" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -329,9 +347,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TokenQueue.rb">
+    <entry file="file://$PROJECT_DIR$/Code/TokenQueue.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="5" selection-start="99" selection-end="99" vertical-scroll-proportion="0.17894737">
+        <state line="5" column="17" selection-start="94" selection-end="94" vertical-scroll-proportion="0.1491228">
           <folding />
         </state>
       </provider>
