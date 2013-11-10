@@ -133,3 +133,6 @@ tokenizer = TokenQueue.new('../example/input')
   type, token = tokenizer.get
   puts "#{type.to_s.upcase}: #{token}"
 end
+
+# Regex example for semantic check
+namespace_idenfitier, double_colon, trait = 'uom::weight'.match(/(\w+)(::)(\w+)/).captures
