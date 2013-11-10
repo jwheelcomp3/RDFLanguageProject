@@ -1,7 +1,7 @@
 class TokenQueue
   def initialize(filename)
     @io = File.open(filename)
-    @keywords = ['namespace', 'local', 'global']
+    @keywords = ['namespace', 'local', 'global', 'blank']
   end
 
   def get_char
@@ -42,10 +42,10 @@ class TokenQueue
     case peek_char
       when nil
         return :EOF, nil
-      when "'" || '"'
-        type, token = get_string_lit
-      when '~'
-        type, token = get_tilde_lit
+      when "'"
+        type, token = get_symbol
+      when '"'
+        type, token = get_symbol
       when '='
         type, token = get_equality_operator
       when '{'
@@ -53,34 +53,15 @@ class TokenQueue
       when '}'
         type, token = get_closing_brace
       else
-        type, token = get_keyword_or_identifier
+        type, token = get_keyword_or_literal
     end
     if peek; @io.pos = start_position end
     return type, token
   end
 
-  def get_string_lit
-    type = :string_literal
-    token = ''
-
-    opening_char = get_char
-    until (char = get_char) == opening_char
-      token << char
-    end
-
-    return type, token
-  end
-
-  def get_tilde_lit
-    type = :tiled_literal
-    token = ''
-
-    get_char
-    until (char = peek_char) == '}'
-      token << get_char
-    end
-
-    token.rstrip!
+  def get_symbol
+    type = :symbol
+    token = get_char
 
     return type, token
   end
@@ -106,18 +87,18 @@ class TokenQueue
     return type, token
   end
 
-  def get_keyword_or_identifier
+  def get_keyword_or_literal
     token = ''
 
     until (char = peek_char).match /\s/
-      break if char == '{' # Handle opening brace without whitespace
+      break if char == '{' || char == '}' || char == "'" || char == '"' # Handle opening brace without whitespace
       token << get_char
     end
 
     if is_keyword? token.downcase
       type = :keyword
     else
-      type = :identifier
+      type = :literal
     end
 
     return type, token
@@ -128,11 +109,11 @@ class TokenQueue
   end
 end
 
-tokenizer = TokenQueue.new('../example/input')
-100.times do
-  type, token = tokenizer.get
-  puts "#{type.to_s.upcase}: #{token}"
-end
-
-# Regex example for semantic check
-namespace_idenfitier, double_colon, trait = 'uom::weight'.match(/(\w+)(::)(\w+)/).captures
+#tokenizer = TokenQueue.new('../example/input')
+#100.times do
+#  type, token = tokenizer.get
+#  puts "#{type.to_s.upcase}: #{token}"
+#end
+#
+## Regex example for semantic check
+#namespace_idenfitier, double_colon, trait = 'uom::weight'.match(/(\w+)(::)(\w+)/).captures

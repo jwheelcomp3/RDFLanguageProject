@@ -5,21 +5,20 @@ class Parser
   # Input is the Token Queue filled by the Tokenizer
   def initialize(token_queue)
     @tq = token_queue
-    @tq.add({:content => '$', :type => 'EOF'})
+    next_content
   end
 
   #TODO:  Test beyond Namespace block
   #TODO:  Send names to Symbol Table AND Semantic Checks
 
   def start
-    content = @tq.get_content
     expected = %w(namespace ' local global blank)
-    if expected.include? content
+    if expected.include? @content
       all()
     else
-      raise ('Received input: '+content+', expected: '+expected.each {|e| e.to_s+'; '})
+      raise ('Received input: '+@content.to_s+', expected: '+expected.each {|e| e.to_s+'; '})
     end
-    unless @tq.get_content == '$' && @tq.get_type == 'EOF'
+    unless @type == :EOF
       raise ('Excessive input when program should be finished.')
     end
     puts 'Successful Parse!'
@@ -29,35 +28,32 @@ class Parser
   end
 
   def all
-    content = @tq.get_content
     expected = %w(namespace \' local global blank)
-    if expected.include? content
+    if expected.include? @content
       namespace_block
       definition
     else
-      raise ('Received input: '+content+', expected: '+expected.each {|e| e.to_s+'; '})
+      raise ('Received input: '+@content.to_s+', expected: '+expected.each {|e| e.to_s+'; '})
     end
   end
 
   def namespace_block
-    content = @tq.get_content
-    follow_expected = %w(' local global blank $)
-    if content == 'namespace'
-      @tq.next
-      get_next_check(@tq.get_type, :id)
-      get_next_check(@tq.get_content, '=')
+    follow_expected = %w(' local global blank)
+    if @content == 'namespace'
+      get_next_check(@content, 'namespace')
+      get_next_check(@type, :literal)
+      get_next_check(@content, '=')
       uri
       namespace_block
-    else unless follow_expected.include? content
-        raise ('Received input: '+content+', expected: '+follow_expected.each {|e| e.to_s+'; '})
+    else unless follow_expected.include? @content || @type == :EOF
+        raise ('Received input: '+@content.to_s+', expected: '+follow_expected.each {|e| e.to_s+'; '})
         end
     end
   end
 
   def definition
-    content = @tq.get_content
-    case content
-    when '\''
+    case @content
+    when "'"
       uri
       block
       definition
@@ -70,80 +66,99 @@ class Parser
       block
       definition
     when 'blank'
+      get_next_check(@content, 'blank')
       block
       definition
-    else unless content == '$'
-      raise('Received input: '+content+', expected: \'; local; global; blank;')
+    else unless @type == :EOF || @content == '}'
+      raise('Received input: '+@content.to_s+', expected: \'; local; global; blank;')
       end
     end
   end
 
   def uri
-    content = @tq.get_content
-    if get_next_check(content, '\'')
-      get_next_check(@tq.get_type , :literal)
-      get_next_check(@tq.get_content , '\'')
-    end
+    get_next_check(@content, "'")
+    get_next_check(@type , :literal)
+    get_next_check(@content , "'")
   end
 
   def local_id
-    content = @tq.get_content
-    get_next_check(content, 'local')
-    get_next_check(@tq.get_type, :id)
+    get_next_check(@content, 'local')
+    get_next_check(@type, :literal)
   end
 
   def global_id
-    content = @tq.get_content
-    get_next_check(content, 'global')
-    get_next_check(@tq.get_type, :id)
+    get_next_check(@content, 'global')
+    get_next_check(@type, :literal)
   end
 
   def block
-    content = @tq.get_content
-    get_next_check(content, '{')
-    namespace_verb
-    verb_content
-    get_next_check(content, '}')
+    get_next_check(@content, '{')
+    inner_block
+    get_next_check(@content, '}')
+  end
+
+  def inner_block
+    if %w(' local global blank).include? @content
+      definition
+    elsif @type == :literal
+      namespace_verb
+      verb_content
+      inner_block
+    else unless @content == '}'
+       raise('Received input: '+@content.to_s+', expected: };')
+     end
+    end
   end
 
   def namespace_verb
-    type = @tq.get_type
-    get_next_check(type, :id)
-    get_next_check(@tq.get_content, '::')
-    get_next_check(@tq.get_type, :id)
+    type = @type
+    #entire thing is id; cut on :: and rn semantic check on first half
+    if type == :literal
+      namespace = @content.split(/#|::/).first
+      next_content
+    end
   end
 
   def verb_content
-    content = @tq.get_content
-    if content == '\''
+    if @content == "'"
       uri
       node_in_verb
-    elsif content == '{' || content == '}'
+    elsif @content == '{'
       node_in_verb
-    else
-         raise('Received input: '+content+', expected: \'; {; };')
+    else unless @content == '}'
+         raise('Received input: '+@content.to_s+', expected: \'; {; };')
+       end
     end
   end
 
   def node_in_verb
-    content = @tq.get_content
-    if content == '{'
-      get_next_check(content, '{')
+    if @content == '{'
+      get_next_check(@content, '{')
       verb_block
-      get_next_check(content, '}')
-    else unless content == '}'
-        raise('Received input: '+content+', expected: };')
-         end
+      get_next_check(@content, '}')
+    else unless @content == '}' || @type == :literal
+        raise('Received input: '+@content.to_s+', expected: };')
+       end
     end
   end
 
   def verb_block
-    content = @tq.get_content
-    if content == '~'
-      get_next_check(content, '~')
-      get_next_check(@tq.get_type, :literal)
+    if @content == '"'
+      get_next_check(@content, '"')
+      continued_literal
+      get_next_check(@content, '"')
     else
       definition
+    end
+  end
+
+  def continued_literal
+    if @type == :literal
+      get_next_check(@type, :literal)
+      continued_literal
+    else unless @content == '"'
+           raise('Received input: '+@content.to_s+', expected: ""')
+         end
     end
   end
 
@@ -152,33 +167,28 @@ class Parser
       raise('Input missing, should be: '+expected)
     elsif expected.class == 'Array'
       if expected.include? value
-        @tq.next
+        @type, @content = @tq.get
         true
       else
         raise('Received input: '+value+', expected: '+expected.each {|e| e.to_s+'; '})
       end
     elsif expected.to_s == value.to_s
-      @tq.next
+      @type, @content =  @tq.get
       true
     else
       raise('Received input: '+value+', expected: '+expected)
     end
-   end
+
+    puts (@type.to_s+': with value: '+@content.to_s)
+
+  end
+
+  def next_content
+    @type, @content = @tq.get
+    puts (@type.to_s+': with value: '+@content.to_s)
+  end
 end
 
 
-#tq = TokenQueue.new()
-#tq.add({:content => 'namespace', :type => 'keyword'})
-#tq.add({:content => 'foaf', :type => 'id'})
-#tq.add({:content => '=', :type => 'symbol'})
-#tq.add({:content => '\'', :type => 'symbol'})
-#tq.add({:content => 'uri', :type => 'literal'})
-#tq.add({:content => '\'', :type => 'symbol'})
-#tq.add({:content => 'namespace', :type => 'keyword'})
-#tq.add({:content => 'owl', :type => 'id'})
-#tq.add({:content => '=', :type => 'symbol'})
-#tq.add({:content => '\'', :type => 'symbol'})
-#tq.add({:content => 'different uri', :type => 'literal'})
-#tq.add({:content => '\'', :type => 'symbol'})
-#
-#Parser.new(tq).start()
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input')
+Parser.new(tokenizer).start

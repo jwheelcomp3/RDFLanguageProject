@@ -5,7 +5,7 @@ namespace base = 'http://www.iloveTigers.com'
 
 local TigerLover{
     foaf::name {
-		~Joseph Catz
+		"Joseph Catz"
 	}
 	owl::SameAs 'http://www.facebook.com/Catlover500'
 	base::likes 'http://www.iloveTigers.com#Tiger'
@@ -14,7 +14,7 @@ local TigerLover{
 global Cat{
 	blank {
 		rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
-			~88.8
+			"88.8"
 		}
 		uom::weight 'http://www.measures.org/units#kilograms'
 	}
@@ -25,7 +25,7 @@ global Cat{
 	owl::Parent {
 		local SiberianTiger{
 			base::color {
-				~white
+				"white"
 			}
 		}
 	}
