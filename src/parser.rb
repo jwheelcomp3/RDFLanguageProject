@@ -45,7 +45,7 @@ class Parser
       get_next_check(@content, '=')
       uri
       namespace_block
-    else unless follow_expected.include? @content || @type == :EOF
+    else unless (follow_expected.include? @content) || @type == :EOF
         raise ('Received input: '+@content.to_s+', expected: '+follow_expected.each {|e| e.to_s+'; '})
         end
     end
@@ -69,7 +69,7 @@ class Parser
       get_next_check(@content, 'blank')
       block
       definition
-    else unless @type == :EOF || @content == '}'
+    else unless @type == :EOF || @content == '}' || @type == :literal
       raise('Received input: '+@content.to_s+', expected: \'; local; global; blank;')
       end
     end
@@ -100,6 +100,7 @@ class Parser
   def inner_block
     if %w(' local global blank).include? @content
       definition
+      inner_block
     elsif @type == :literal
       namespace_verb
       verb_content
@@ -122,12 +123,21 @@ class Parser
   def verb_content
     if @content == "'"
       uri
-      node_in_verb
+      maybe_node_in_verb
     elsif @content == '{'
       node_in_verb
-    else unless @content == '}'
-         raise('Received input: '+@content.to_s+', expected: \'; {; };')
+    else unless %w(' } local global blank).include? @content
+         raise('Received input: '+@content.to_s+', expected: \'; };')
        end
+    end
+  end
+
+  def maybe_node_in_verb
+    if @content == '{'
+      node_in_verb
+    else unless (%w(' } local global blank).include? @content) || @type == :literal
+           raise('Received input: '+@content.to_s+', expected: \'; };')
+         end
     end
   end
 
@@ -192,3 +202,10 @@ end
 
 tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input')
 Parser.new(tokenizer).start
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input2.txt')
+Parser.new(tokenizer).start
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input3.txt')
+Parser.new(tokenizer).start
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input4.txt')
+Parser.new(tokenizer).start
+

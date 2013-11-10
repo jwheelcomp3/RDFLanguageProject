@@ -1,0 +1,7 @@
+local TigerLover{
+    foaf::name {
+		"Joseph Catz"
+	}
+	owl::SameAs 'http://www.facebook.com/Catlover500'
+	base::likes 'http://www.iloveTigers.com#Tiger'
+}
