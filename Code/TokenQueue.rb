@@ -29,5 +29,9 @@ class TokenQueue
 
 	def get_follow_content
 		@queue[@position + 1][:content] unless @queue[@position + 1] == nil
-	end
+  end
+
+  def is_empty
+    (@queue.length - 1) == initialize
+  end
 end
