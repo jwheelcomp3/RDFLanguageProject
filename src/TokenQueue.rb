@@ -1,40 +1,17 @@
-#namespace foaf = 'http://xmlns.com/foaf/0.1/'
-#namespace owl = 'http://www.w3.org/2002/07/owl#'
-#namespace uom = 'http://www.measures.org/units#'
-#namespace base = 'http://www.iloveTigers.com'
-#
-#local TigerLover{
-#  foaf::name {
-#    ~Joseph Catz
-#  }
-#  owl::SameAs 'http://www.facebook.com/Catlover500'
-#  base::likes 'http://www.iloveTigers.com#Tiger'
-#}
-#
-#global Cat{
-#  blank {
-#    rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
-#        ~88.8
-#  }
-#  uom::weight 'http://www.measures.org/units#kilograms'
-#}
-#}
-#
-#'http://www.iloveTigers.com/TigerFans#Tiger'{
-#    owl::Child 'http://www.iloveTigers.com#Cat'
-#owl::Parent {
-#  local SiberianTiger{
-#    base::color {
-#      ~white
-#    }
-#  }
-#}
-#}
-
 class TokenQueue
   def initialize(filename)
     @io = File.open(filename)
     @keywords = ['namespace', 'local', 'global']
+  end
+
+  def get_char
+    @io.getc
+  end
+
+  def peek_char
+    char = get_char
+    @io.pos -= 1
+    char
   end
 
   def peek
@@ -42,59 +19,108 @@ class TokenQueue
   end
 
   def get (peek = false)
+    type = nil
+    token = ''
+
     if peek; start_position = @io.pos end
 
-    token = []
-    type = nil
-
-    while char = @io.getc
-      case char
-        when /['"]/
-          type = :string_literal
-          opening_char = char
-          until (char = @io.getc) == opening_char
-            token << char
-          end
-        when '~'
-          type = :tilde
-          until (char = @io.getc).match /\s/
-            token << char
-          end
-        when '='
-          type = :equals
-        when '{'
-          if token.empty?
-            type = :open_brace
-          else
-            @io.pos -= 1
-            break
-          end
-        when '}'
-          type = :closing_brace
-        when "\n"
+    # Consume whitespace
+    if peek_char.match /\s/
+      while (char = @io.getc)
+        if char.nil?
+          # Handle EOF
+          return :EOF, nil
+        elsif
+          # Terminate loop with non-whitespace char and backup position one char
+          char.match /\S/
+          @io.pos -= 1
           break
-        when /\s/
-          if token.empty?
-            next
-          else
-            break
-          end
-        else
-          token << char
+        end
       end
     end
 
-    if char.nil?
-      type = :eof
+    case peek_char
+      when nil
+        return :EOF, nil
+      when "'" || '"'
+        type, token = get_string_lit
+      when '~'
+        type, token = get_tilde_lit
+      when '='
+        type, token = get_equality_operator
+      when '{'
+        type, token = get_opening_brace
+      when '}'
+        type, token = get_closing_brace
+      else
+        type, token = get_keyword_or_identifier
     end
-
-    if type.nil?
-      is_keyword?(token.join) ? type = :keyword :type = :identifier
-    end
-
     if peek; @io.pos = start_position end
+    return type, token
+  end
 
-    return type, token.join
+  def get_string_lit
+    type = :string_literal
+    token = ''
+
+    opening_char = get_char
+    until (char = get_char) == opening_char
+      token << char
+    end
+
+    return type, token
+  end
+
+  def get_tilde_lit
+    type = :tiled_literal
+    token = ''
+
+    get_char
+    until (char = peek_char) == '}'
+      token << get_char
+    end
+
+    token.rstrip!
+
+    return type, token
+  end
+
+  def get_equality_operator
+    type = :equality_operator
+    token = get_char
+
+    return type, token
+  end
+
+  def get_opening_brace
+    type = :opening_brace
+    token = get_char
+
+    return type, token
+  end
+
+  def get_closing_brace
+    type = :closing_brace
+    token = get_char
+
+    return type, token
+  end
+
+  def get_keyword_or_identifier
+    token = ''
+
+    until (char = peek_char).match /\s/
+      break if char == '{' # Handle opening brace without whitespace
+      token << get_char
+    end
+
+    if is_keyword? token.downcase
+      type = :keyword
+    else
+      type = :identifier
+    end
+
+    return type, token
   end
 
   def is_keyword? (word)
@@ -103,7 +129,7 @@ class TokenQueue
 end
 
 tokenizer = TokenQueue.new('../example/input')
-80.times do
+100.times do
   type, token = tokenizer.get
   puts "#{type.to_s.upcase}: #{token}"
 end
