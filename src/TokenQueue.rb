@@ -1,41 +1,35 @@
-#class TokenQueue
-#	#First In, First Out -- Queue
+#namespace foaf = 'http://xmlns.com/foaf/0.1/'
+#namespace owl = 'http://www.w3.org/2002/07/owl#'
+#namespace uom = 'http://www.measures.org/units#'
+#namespace base = 'http://www.iloveTigers.com'
 #
-#	def initialize
-#		@queue = []
-#		@position = 0
-#	end
+#local TigerLover{
+#  foaf::name {
+#    ~Joseph Catz
+#  }
+#  owl::SameAs 'http://www.facebook.com/Catlover500'
+#  base::likes 'http://www.iloveTigers.com#Tiger'
+#}
 #
-#  #input expected to be {:content => 'foaf', :type => 'id'} format
-#  def add(input)
-#		@queue = @queue.push(input)
-#  end
+#global Cat{
+#  blank {
+#    rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
+#        ~88.8
+#  }
+#  uom::weight 'http://www.measures.org/units#kilograms'
+#}
+#}
 #
-#  def next
-#		@position += 1
-#  end
-#
-#	def get_type
-#		@queue[@position][:type] unless @queue[@position] == nil
-#	end
-#
-#	def get_follow_type
-#		@queue[@position + 1][:type] unless @queue[@position + 1] == nil
-#	end
-#
-#  def get_content
-#	  @queue[@position][:content] unless @queue[@position] == nil
-#  end
-#
-#	def get_follow_content
-#		@queue[@position + 1][:content] unless @queue[@position + 1] == nil
-#  end
-#
-#  def is_empty
-#    (@queue.length - 1) == initialize
-#  end
-#end
-
+#'http://www.iloveTigers.com/TigerFans#Tiger'{
+#    owl::Child 'http://www.iloveTigers.com#Cat'
+#owl::Parent {
+#  local SiberianTiger{
+#    base::color {
+#      ~white
+#    }
+#  }
+#}
+#}
 
 class TokenQueue
   def initialize(filename)
@@ -59,6 +53,11 @@ class TokenQueue
           type = :string_literal
           opening_char = char
           until (char = @io.getc) == opening_char
+            token << char
+          end
+        when '~'
+          type = :tilde
+          until (char = @io.getc).match /\s/
             token << char
           end
         when '='
@@ -103,8 +102,8 @@ class TokenQueue
   end
 end
 
-#tokenizer = ModernTokenizer.new('../example/input')
-#80.times do
-#  type, token = tokenizer.get
-#  puts "#{type.to_s.upcase}: #{token}"
-#end
+tokenizer = TokenQueue.new('../example/input')
+80.times do
+  type, token = tokenizer.get
+  puts "#{type.to_s.upcase}: #{token}"
+end

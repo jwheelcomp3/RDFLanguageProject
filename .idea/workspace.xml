@@ -2,22 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/example/input" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tokenizer.rb" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.gitattributes" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/Code/TokenQueue.rb" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/Code/parser.rb" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/TokenQueue.rb" afterPath="$PROJECT_DIR$/src/TokenQueue.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="RDFLanguageProject.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384045988915" ignored="false" />
     <file path="/token.rb" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384028659144" ignored="false" />
-    <file path="/TokenQueue.rb" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384052644613" ignored="false" />
+    <file path="/TokenQueue.rb" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384093883460" ignored="false" />
     <file path="/a.rxml" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384043023869" ignored="false" />
     <file path="/a.rb" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384029281089" ignored="false" />
     <file path="/.gitignore" changelist="29a1cfbf-2c7c-4e79-8e45-d2a6ccbb9eca" time="1384042395586" ignored="false" />
@@ -42,22 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="tokenizer.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tokenizer.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="10" selection-start="0" selection-end="1322" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TokenQueue.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TokenQueue.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="24" selection-start="498" selection-end="498" vertical-scroll-proportion="0.30256012">
-              <folding>
-                <marker date="1384052653000" expanded="true" signature="1965:2043" placeholder="do ... end" />
-              </folding>
+            <state line="60" column="23" selection-start="1293" selection-end="1293" vertical-scroll-proportion="0.5352987">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -77,7 +61,7 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="111" selection-start="432" selection-end="432" vertical-scroll-proportion="-8.888889">
+            <state line="0" column="0" selection-start="0" selection-end="669" vertical-scroll-proportion="-0.0">
               <folding />
             </state>
           </provider>
@@ -343,13 +327,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="2560" height="1414" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25616547" sideWeight="0.6704162" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25616547" sideWeight="0.6704162" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -430,16 +414,6 @@
         <state line="4" column="9" selection-start="67" selection-end="67" vertical-scroll-proportion="0.04654771" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/input">
-      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="111" selection-start="432" selection-end="432" vertical-scroll-proportion="-8.888889">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/parser.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="164" column="21" selection-start="3834" selection-end="3834" vertical-scroll-proportion="-98.4">
@@ -447,19 +421,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tokenizer.rb">
+    <entry file="file://$PROJECT_DIR$/example/input">
+      <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="10" selection-start="0" selection-end="1322" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="669" vertical-scroll-proportion="-0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TokenQueue.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="24" selection-start="498" selection-end="498" vertical-scroll-proportion="0.30256012">
-          <folding>
-            <marker date="1384052653000" expanded="true" signature="1965:2043" placeholder="do ... end" />
-          </folding>
+        <state line="60" column="23" selection-start="1293" selection-end="1293" vertical-scroll-proportion="0.5352987">
+          <folding />
         </state>
       </provider>
     </entry>
