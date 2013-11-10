@@ -5,5 +5,5 @@ Project for Programming Languages Paradigms course creating an interpreted langu
 
 
 Authors:
-Matt Walston
-Jared Wheeler
+* Matt Walston
+* Jared Wheeler
