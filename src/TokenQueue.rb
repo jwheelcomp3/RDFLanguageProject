@@ -34,7 +34,7 @@
 class TokenQueue
   def initialize(filename)
     @io = File.open(filename)
-    @keywords = ['namespace', 'local']
+    @keywords = ['namespace', 'local', 'global']
   end
 
   def peek
