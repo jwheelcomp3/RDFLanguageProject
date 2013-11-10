@@ -179,13 +179,13 @@ class Parser
       raise('Received input: '+value+', expected: '+expected)
     end
 
-    puts (@type.to_s+': with value: '+@content.to_s)
+    #puts (@type.to_s+': with value: '+@content.to_s)
 
   end
 
   def next_content
     @type, @content = @tq.get
-    puts (@type.to_s+': with value: '+@content.to_s)
+    #puts (@type.to_s+': with value: '+@content.to_s)
   end
 end
 
