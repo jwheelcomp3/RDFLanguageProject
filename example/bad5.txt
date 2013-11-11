@@ -1,15 +1,14 @@
 namespace foaf = 'http://xmlns.com/foaf/0.1/'
 namespace owl = 'http://www.w3.org/2002/07/owl#'
 namespace uom = 'http://www.measures.org/units#'
-namespace base = 'http://www.iloveTigers.com'
 
 local TigerLover{
     foaf::name {
 		"Joseph Catz"
 	}
 	owl::SameAs 'http://www.facebook.com/Catlover500'
-	base::likes 'http://www.iloveTigers.com#Tiger'
-	big::pseudoname {
+	uom::likes 'http://www.iloveTigers.com#Tiger'
+	rdf::pseudoname {
 		"Joseph Catz"
 	}
 }

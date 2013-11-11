@@ -8,21 +8,22 @@ class Parser
     next_content
     @namespaces = {'rdf' => "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
     @identifier = nil
-  end
 
-  #TODO:  Send names to Symbol Table AND Additional Semantic Checks
-  #TODO:  Generate Proper output
+  end
 
   def start
     expected = %w(namespace ' local global blank)
     if expected.include? @content
+      @output = "<?xml version=\"1.0\">\n<rdf:RDF"
       all()
+      @output += "\n</rdf:RDF>"
     else
       raise ('Received input: '+@content.to_s+', expected: '+expected.each {|e| e.to_s+'; '})
     end
     unless @type == :EOF
       raise ('Excessive input when program should be finished.')
     end
+  puts @output
   rescue Exception => e
     puts e.message
     #puts e.backtrace
@@ -32,6 +33,8 @@ class Parser
     expected = %w(namespace \' local global blank)
     if expected.include? @content
       namespace_block
+      @namespaces.each {|key, uri| @output+= "\n\t\txmlns:"+key.to_s+'='+uri.to_s}
+      @output+= '>'
       definition
     else
       raise ('Received input: '+@content.to_s+', expected: '+expected.each {|e| e.to_s+'; '})
@@ -55,22 +58,37 @@ class Parser
 
   def definition
     case @content
-    when "'"
-      uri
-      block
-      definition
-    when 'local'
-      local_id
-      block
-      definition
-    when 'global'
-      global_id
-      block
-      definition
-    when 'blank'
-      get_next_check(@content, 'blank')
-      block
-      definition
+      when "'"  #rdf:about
+        @output += "\n<rdf:Description"
+        @output += "\t\trdf:about="
+        uri
+        @output += '>'
+        block
+        @output += "\n</rdf:Description>"
+        definition
+      when 'local'  #rdf:nodeID
+        @output += "\n<rdf:Description"
+        local_id
+        @output += '>'
+        block
+        @output += "\n</rdf:Description>"
+        definition
+      when 'global' #rdf:ID
+        if @namespaces['base'].nil?
+          raise('Cannot use global identifier without a base namespace.')
+        end
+        @output += "\n<rdf:Description"
+        global_id
+        @output += '>'
+        block
+        @output += "\n</rdf:Description>"
+        definition
+      when 'blank'  #no identifier
+        @output += "\n<rdf:Description>"
+        get_next_check(@content, 'blank')
+        block
+        definition
+        @output += "\n</rdf:Description>"
     else unless @type == :EOF || @content == '}' || @type == :literal
       raise('Received input: '+@content.to_s+', expected: \'; local; global; blank;')
       end
@@ -81,28 +99,41 @@ class Parser
     get_next_check(@content, "'")
     if @type == :literal
       unless @content.match %r{\Ahttp:s?//.+}i
-        raise(@content.to_s+' is an invalid URI')
+        if @node_possible == false
+          raise(@content.to_s+' is an invalid URI')
+        else
+          @output+= ' rdf:nodeID="'+@content.to_s+'"'
+          @node_possible = false
+        end
       end
-      unless @identifier.nil?
+      if !@identifier.nil?
         unless @namespaces[@identifier.to_s].nil?
           raise(@identifier.to_s+' declared twice!')
         else
           @namespaces = @namespaces.merge({@identifier.to_s => @content})
           @identifier = nil
         end
+      elsif @node_possible == true
+        @output+= ' rdf:about="'+@content.to_s+'"'
+      elsif (@node_possible == false) && (@content.match %r{\Ahttp:s?//.+}i) #Used either as rdf:about or rdf:resource target
+          @output+= '"'+@content+'"'
       end
     end
     get_next_check(@type , :literal)
     get_next_check(@content , "'")
+    @node_possible = false
   end
 
   def local_id
     get_next_check(@content, 'local')
+    @output += "\n\t\trdf:nodeID=\""+@content.to_s+'"'
+    @namespaces = @namespaces.merge({@content.to_s => 'local'})
     get_next_check(@type, :literal)
   end
 
   def global_id
     get_next_check(@content, 'global')
+    @output += "\n\t\trdf:ID="+@content.to_s
     get_next_check(@type, :literal)
   end
 
@@ -117,8 +148,13 @@ class Parser
       definition
       inner_block
     elsif @type == :literal
+      verb_type = @content.clone
+      @output += "\n\t<"
       namespace_verb
-      verb_content
+      close = verb_content
+      if close
+        @output += "\n\t<\\"+verb_type.sub!('::', ':').to_s+'>'
+      end
       inner_block
     else unless @content == '}'
        raise('Received input: '+@content.to_s+', expected: };')
@@ -133,6 +169,7 @@ class Parser
       if @namespaces[namespace.to_s].nil?
         raise('Invalid Namespace: '+namespace.to_s)
       end
+      @output += @content.sub!('::', ':').to_s
       next_content
     else
       raise('Received input: '+@content.to_s+', expected a namespace::predicate')
@@ -141,10 +178,13 @@ class Parser
 
   def verb_content
     if @content == "'"
+      @node_possible = true;
       uri
-      maybe_node_in_verb
+      return_val = maybe_node_in_verb
+      return_val
     elsif @content == '{'
       node_in_verb
+      true
     else unless %w(' } local global blank).include? @content
          raise('Received input: '+@content.to_s+', expected: \'; };')
        end
@@ -153,15 +193,20 @@ class Parser
 
   def maybe_node_in_verb
     if @content == '{'
+      true
       node_in_verb
     else unless (%w(' } local global blank).include? @content) || @type == :literal
            raise('Received input: '+@content.to_s+', expected: \'; };')
+         else
+           @output += '/>'
+           false
          end
     end
   end
 
   def node_in_verb
     if @content == '{'
+      @output+= '>'
       get_next_check(@content, '{')
       verb_block
       get_next_check(@content, '}')
@@ -183,6 +228,7 @@ class Parser
 
   def continued_literal
     if @type == :literal
+      @output += @content.to_s
       get_next_check(@type, :literal)
       continued_literal
     else unless @content == '"'
@@ -207,49 +253,52 @@ class Parser
     else
       raise('Received input: '+value+', expected: '+expected)
     end
-
-    #puts (@type.to_s+': with value: '+@content.to_s)
-
   end
 
   def next_content
     @type, @content = @tq.get
-    #puts (@type.to_s+': with value: '+@content.to_s)
   end
 end
 
 ####Good Test Suite
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input')
-Parser.new(tokenizer).start
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input')
+#Parser.new(tokenizer).start
+#
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input2.txt')
+#Parser.new(tokenizer).start
+#
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input3.txt')
+#Parser.new(tokenizer).start
+#
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input4.txt')
+#Parser.new(tokenizer).start
+#
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input5.txt')
+#Parser.new(tokenizer).start
 
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input2.txt')
-Parser.new(tokenizer).start
 
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input3.txt')
-Parser.new(tokenizer).start
-
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input4.txt')
-Parser.new(tokenizer).start
-
-
-
-####Bad Semantic Test Suite
-#undeclared namespace
-puts 'bad1 -- undeclared namespace'
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad1.txt')
-Parser.new(tokenizer).start
-
-#bad namespace URI
-puts 'bad2 -- bad namespace URI'
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad2.txt')
-Parser.new(tokenizer).start
-
-#bad body URI
-puts 'bad3 -- bad body URI'
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad3.txt')
-Parser.new(tokenizer).start
-
-#duplicate namespace
-puts 'bad4 -- duplicate namespace'
-tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad4.txt')
-Parser.new(tokenizer).start
+#####Bad Semantic Test Suite
+##undeclared namespace
+#puts 'bad1 -- undeclared namespace'
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad1.txt')
+#Parser.new(tokenizer).start
+#
+##bad namespace URI
+#puts 'bad2 -- bad namespace URI'
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad2.txt')
+#Parser.new(tokenizer).start
+#
+##bad body URI
+#puts 'bad3 -- bad body URI'
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad3.txt')
+#Parser.new(tokenizer).start
+#
+##duplicate namespace
+#puts 'bad4 -- duplicate namespace'
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad4.txt')
+#Parser.new(tokenizer).start
+#
+##no base namespace using local/global
+#puts 'bad5 -- no base namespace using global'
+#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad5.txt')
+#Parser.new(tokenizer).start
