@@ -1,7 +1,7 @@
 local TigerLover{
-    foaf::name {
+    rdf::name {
 		"Joseph Catz"
 	}
-	owl::SameAs 'http://www.facebook.com/Catlover500'
-	base::likes 'http://www.iloveTigers.com#Tiger'
+	rdf::SameAs 'http://www.facebook.com/Catlover500'
+	rdf::likes 'http://www.iloveTigers.com#Tiger'
 }
