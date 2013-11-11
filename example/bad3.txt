@@ -1,0 +1,54 @@
+namespace foaf = 'http://xmlns.com/foaf/0.1/'
+namespace owl = 'http://www.w3.org/2002/07/owl#'
+namespace uom = 'http://www.measures.org/units#'
+namespace base = 'http://www.iloveTigers.com'
+
+local TigerLover{
+    foaf::name {
+		"Joseph Catz"
+	}
+	owl::SameAs 'http://www.facebook.com/Catlover500'
+	base::likes 'http://www.iloveTigers.com#Tiger'
+	big::pseudoname {
+		"Joseph Catz"
+	}
+}
+
+global Cat{
+	owl::SameAs 'http://www.facebook.com/Catlover500'
+	'htp://www.iloveTigers.com/TigerFans#Tiger'{
+		owl::Child 'http://www.iloveTigers.com#Cat'
+	}
+	blank {
+		rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
+			"88.8"
+		}
+		uom::weight 'http://www.measures.org/units#kilograms'
+	}
+	'http://www.iloveTigers.com/TigerFans#Tiger'{
+		big::Child 'http://www.iloveTigers.com#Cat'
+	}
+	foaf::friend {
+		"Joseph Catz"
+	}
+	'http://www.iloveTigers.com/TigerFans#Tiger'{
+		owl::Child 'http://www.iloveTigers.com#Cat'
+	}
+	blank {
+		rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
+			"88.8"
+		}
+		uom::weight 'http://www.measures.org/units#kilograms'
+	}
+}
+
+'http://www.iloveTigers.com/TigerFans#Tiger'{
+	owl::Child 'http://www.iloveTigers.com#Cat'
+	owl::Parent {
+		local SiberianTiger{
+			base::color {
+				"white"
+			}
+		}
+	}
+}

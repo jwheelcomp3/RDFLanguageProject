@@ -2,14 +2,16 @@ require_relative 'TokenQueue'
 
 class Parser
 
-  # Input is the Token Queue filled by the Tokenizer
+  # Input is theTokenizer
   def initialize(token_queue)
     @tq = token_queue
     next_content
+    @namespaces = {'rdf' => "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
+    @identifier = nil
   end
 
-  #TODO:  Test beyond Namespace block
-  #TODO:  Send names to Symbol Table AND Semantic Checks
+  #TODO:  Send names to Symbol Table AND Additional Semantic Checks
+  #TODO:  Generate Proper output
 
   def start
     expected = %w(namespace ' local global blank)
@@ -21,10 +23,9 @@ class Parser
     unless @type == :EOF
       raise ('Excessive input when program should be finished.')
     end
-    puts 'Successful Parse!'
   rescue Exception => e
     puts e.message
-    puts e.backtrace
+    #puts e.backtrace
   end
 
   def all
@@ -41,6 +42,7 @@ class Parser
     follow_expected = %w(' local global blank)
     if @content == 'namespace'
       get_next_check(@content, 'namespace')
+      @identifier = @content;
       get_next_check(@type, :literal)
       get_next_check(@content, '=')
       uri
@@ -77,6 +79,19 @@ class Parser
 
   def uri
     get_next_check(@content, "'")
+    if @type == :literal
+      unless @content.match %r{\Ahttp:s?//.+}i
+        raise(@content.to_s+' is an invalid URI')
+      end
+      unless @identifier.nil?
+        unless @namespaces[@identifier.to_s].nil?
+          raise(@identifier.to_s+' declared twice!')
+        else
+          @namespaces = @namespaces.merge({@identifier.to_s => @content})
+          @identifier = nil
+        end
+      end
+    end
     get_next_check(@type , :literal)
     get_next_check(@content , "'")
   end
@@ -113,10 +128,14 @@ class Parser
 
   def namespace_verb
     type = @type
-    #entire thing is id; cut on :: and rn semantic check on first half
     if type == :literal
       namespace = @content.split(/#|::/).first
+      if @namespaces[namespace.to_s].nil?
+        raise('Invalid Namespace: '+namespace.to_s)
+      end
       next_content
+    else
+      raise('Received input: '+@content.to_s+', expected a namespace::predicate')
     end
   end
 
@@ -199,13 +218,38 @@ class Parser
   end
 end
 
-
+####Good Test Suite
 tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input')
 Parser.new(tokenizer).start
+
 tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input2.txt')
 Parser.new(tokenizer).start
+
 tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input3.txt')
 Parser.new(tokenizer).start
+
 tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input4.txt')
 Parser.new(tokenizer).start
 
+
+
+####Bad Semantic Test Suite
+#undeclared namespace
+puts 'bad1 -- undeclared namespace'
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad1.txt')
+Parser.new(tokenizer).start
+
+#bad namespace URI
+puts 'bad2 -- bad namespace URI'
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad2.txt')
+Parser.new(tokenizer).start
+
+#bad body URI
+puts 'bad3 -- bad body URI'
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad3.txt')
+Parser.new(tokenizer).start
+
+#duplicate namespace
+puts 'bad4 -- duplicate namespace'
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\bad4.txt')
+Parser.new(tokenizer).start
