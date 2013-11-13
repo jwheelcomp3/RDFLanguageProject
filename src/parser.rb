@@ -114,7 +114,7 @@ class Parser
           @identifier = nil
         end
       elsif @node_possible == true
-        @output+= ' rdf:about="'+@content.to_s+'"'
+        @output+= ' rdf:resource="'+@content.to_s+'"'
       elsif (@node_possible == false) && (@content.match %r{\Ahttp:s?//.+}i) #Used either as rdf:about or rdf:resource target
           @output+= '"'+@content+'"'
       end
@@ -133,7 +133,7 @@ class Parser
 
   def global_id
     get_next_check(@content, 'global')
-    @output += "\n\t\trdf:ID="+@content.to_s
+    @output += "\n\t\trdf:ID=\""+@content.to_s+'"'
     get_next_check(@type, :literal)
   end
 
@@ -153,7 +153,7 @@ class Parser
       namespace_verb
       close = verb_content
       if close
-        @output += "\n\t<\\"+verb_type.sub!('::', ':').to_s+'>'
+        @output += "\n\t</"+verb_type.sub!('::', ':').to_s+'>'
       end
       inner_block
     else unless @content == '}'
@@ -263,7 +263,7 @@ end
 ####Good Test Suite
 #tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input')
 #Parser.new(tokenizer).start
-#
+
 #tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input2.txt')
 #Parser.new(tokenizer).start
 #

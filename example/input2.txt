@@ -1,7 +1,9 @@
+namespace abc = 'http://www.example.org'
+
 local TigerLover{
-    rdf::name {
+    abc::name {
 		"Joseph Catz"
 	}
-	rdf::SameAs 'http://www.facebook.com/Catlover500'
-	rdf::likes 'http://www.iloveTigers.com#Tiger'
+	abc::else 'http://www.facebook.com/Catlover500'
+	abc::another 'http://www.iloveTigers.com#Tiger'
 }

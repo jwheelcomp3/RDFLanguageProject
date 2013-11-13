@@ -21,8 +21,8 @@ global Cat{
 }
 
 'http://www.iloveTigers.com/TigerFans#Tiger'{
-	owl::Child 'http://www.iloveTigers.com#Cat'
-	owl::Parent {
+	uom::Child 'http://www.iloveTigers.com#Cat'
+	uom::Parent {
 		local SiberianTiger{
 			base::color {
 				"white"
