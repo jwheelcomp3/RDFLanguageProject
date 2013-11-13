@@ -14,7 +14,7 @@ class Parser
   def start
     expected = %w(namespace ' local global blank)
     if expected.include? @content
-      @output = "<?xml version=\"1.0\">\n<rdf:RDF"
+      @output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rdf:RDF"
       all()
       @output += "\n</rdf:RDF>"
     else
@@ -33,7 +33,7 @@ class Parser
     expected = %w(namespace \' local global blank)
     if expected.include? @content
       namespace_block
-      @namespaces.each {|key, uri| @output+= "\n\t\txmlns:"+key.to_s+'='+uri.to_s}
+      @namespaces.each {|key, uri| @output+= "\n\t\txmlns:"+key.to_s+'="'+uri.to_s+'"'}
       @output+= '>'
       definition
     else
@@ -228,7 +228,7 @@ class Parser
 
   def continued_literal
     if @type == :literal
-      @output += @content.to_s
+      @output += @content.to_s+' '
       get_next_check(@type, :literal)
       continued_literal
     else unless @content == '"'
