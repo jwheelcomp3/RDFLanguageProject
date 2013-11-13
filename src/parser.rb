@@ -25,6 +25,7 @@ class Parser
     end
   puts @output
   rescue Exception => e
+    puts @output
     puts e.message
     #puts e.backtrace
   end
@@ -56,7 +57,7 @@ class Parser
     end
   end
 
-  def definition
+  def definition(give_output = true)
     case @content
       when "'"  #rdf:about
         @output += "\n<rdf:Description"
@@ -84,11 +85,15 @@ class Parser
         @output += "\n</rdf:Description>"
         definition
       when 'blank'  #no identifier
-        @output += "\n<rdf:Description>"
+        if give_output
+          @output += "\n<rdf:Description>"
+        end
         get_next_check(@content, 'blank')
         block
         definition
-        @output += "\n</rdf:Description>"
+        if give_output
+          @output += "\n</rdf:Description>"
+        end
     else unless @type == :EOF || @content == '}' || @type == :literal
       raise('Received input: '+@content.to_s+', expected: \'; local; global; blank;')
       end
@@ -144,21 +149,28 @@ class Parser
   end
 
   def inner_block
-    if %w(' local global blank).include? @content
-      definition
-      inner_block
-    elsif @type == :literal
+    if @type == :literal
       verb_type = @content.clone
       @output += "\n\t<"
       namespace_verb
-      close = verb_content
-      if close
-        @output += "\n\t</"+verb_type.sub!('::', ':').to_s+'>'
-      end
+      def_or_content(verb_type)
       inner_block
     else unless @content == '}'
        raise('Received input: '+@content.to_s+', expected: };')
      end
+    end
+  end
+
+  def def_or_content(verb_type)
+    if @content.to_s == 'blank'
+      close = true
+      @output+= ' rdf:parseType="Resource">'
+      definition(false)
+    elsif @content.to_s == '{' || @content.to_s == "'"
+      close = verb_content
+    end
+    if close
+      @output += "\n\t</"+verb_type.sub!('::', ':').to_s+'>'
     end
   end
 
@@ -270,8 +282,8 @@ end
 #tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input3.txt')
 #Parser.new(tokenizer).start
 #
-#tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input4.txt')
-#Parser.new(tokenizer).start
+tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input4.txt')
+Parser.new(tokenizer).start
 #
 #tokenizer = TokenQueue.new('D:\Programs\Ruby\RDFLanguageProject\example\input5.txt')
 #Parser.new(tokenizer).start

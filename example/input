@@ -12,8 +12,8 @@ local TigerLover{
 }
 
 global Cat{
-	blank {
-		rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
+	foaf::nice blank {
+		uom::value {
 			"88.8"
 		}
 		uom::weight 'http://www.measures.org/units#kilograms'
@@ -23,7 +23,7 @@ global Cat{
 'http://www.iloveTigers.com/TigerFans#Tiger'{
 	uom::Child 'http://www.iloveTigers.com#Cat'
 	uom::Parent {
-		local SiberianTiger{
+		blank {
 			base::color {
 				"white"
 			}
