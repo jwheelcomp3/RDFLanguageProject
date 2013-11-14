@@ -8,7 +8,7 @@ local TigerLover{
 		"Joseph Catz"
 	}
 	owl::SameAs 'http://www.facebook.com/Catlover500'
-	base::likes 'http://www.iloveTigers.com#Tiger'
+	uom::likes 'http://www.iloveTigers.com#Tiger'
 	foaf::pseudoname {
 		"Joseph Catz"
 	}
@@ -16,23 +16,23 @@ local TigerLover{
 
 global Cat{
 	owl::SameAs 'http://www.facebook.com/Catlover777'
-	blank{
+	uom::measure blank{
 		owl::Child 'http://www.iloveTigers.com#Cat'
 	}
-	blank {
-		rdf::value 'http://www.w3.org/2001/XMLSchema#decimal'{
+	uom::measure blank {
+		uom::value {
 			"88.8"
 		}
 		uom::weight 'http://www.measures.org/units#kilograms'
 	}
-	blank{
+	uom::measure blank{
 		owl::Child 'http://www.iloveTigers.com#Cat'
 	}
 	foaf::friend {
 		"Joseph Catz"
 	}
-	blank {
-		rdf::value {
+	uom::measure blank {
+		uom::value {
 			"88.8"
 		}
 		uom::weight 'http://www.measures.org/units#kilograms'
@@ -41,8 +41,8 @@ global Cat{
 
 'http://www.iloveTigers.com/TigerFans#Tiger'{
 	owl::Child 'http://www.iloveTigers.com#Cat'
-	owl::Parent {
-		blank{
+	uom::Parent blank { 
+		uom::measure blank{
 			base::color {
 				"white"
 			}

@@ -22,11 +22,10 @@ global Cat{
 
 'http://www.iloveTigers.com/TigerFans#Tiger'{
 	uom::Child 'http://www.iloveTigers.com#Cat'
-	uom::Parent {
-		blank {
+	uom::Parent blank {
 			base::color {
 				"white"
 			}
-		}
+		
 	}
 }
