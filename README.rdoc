@@ -1,5 +1,5 @@
-RDF Language Project
-==================
+= RDF Language Project
+
 This is an academic project for Dr. Roger Eggen's Programming Languages Paradigms course at the University of North
 Florida.  The assignment involved creating a language of our choosing.  This is the result.  While you are encouraged to
 fork and use this project, it is unmaintained. We'll review pull requests but do not make any guarantees as to the
@@ -7,21 +7,27 @@ production suitability of this application.
 
 The program generates a subset RDF/XML from a derived language, referred to as RDF/Osprey Notation.
 
-Authors:
+== Authors
 * Matt Walston  <mailto:m@mlw.ac>
 * Jared Wheeler <mailto:m@mlw.ac>
 
 
-Introduction
-RDF is a W3C standard for Linked Data on the Semantic Web.  Specifications for RDF/XML, the output of this language, are located at: http://www.w3.org/TR/REC-rdf-syntax/.
+== Background
+RDF is a W3C standard for linked data on the semantic web. Specifications for RDF/XML, the output of this language,
+are located at: http://www.w3.org/TR/REC-rdf-syntax/.  The W3C has a working validator available at
+http://www.w3.org/RDF/Validator/
 
-RDF is made of items and verbs which link the items.  Items are described within the RDF/XML with Description tags, with the verb tags nested, referring to other items.  The specifications above are a good guide to RDF/XML, there are also guides online and in print format to the theory of RDF and the construction fo RDF/XML.
+RDF is made of items and verbs which link the items together. Items are described within the RDF/XML with Description
+tags, with nested verb tags which refer to other items. The specifications above are the authoratative standard to
+RDF/XML. An abundance of other guides, tutorials and resources exist online and in print which relate to the practical
+application, theory and construction of RDF.
 
-However, XML is not easily human readable, so this declarative language seeks to provide a slightly more human readable format which automatically generates the RDF/XML.  This language provides a strong variety of RDF/XML tools, and therefore can have some results that are not true RDF/XML, and the results should therefore be checked with the W3C RDF Validator located at http://www.w3.org/RDF/Validator/.
+XML was not designed for human readability. It's easy to parse by computer, but painful to edit complex documents by
+manualy. Osprey Notation is designed with human readibility and writability as a primary design goal.  This utility
+demonstrates an example compiler which accepts Osprey Notation and generates RDF/XML. The language implements
+the most common RDF elements and offers a great deal of flexibility.
 
-
-Grammar
-
+== Grammar
 S ->	A				
 A	-> N | D				
 N	-> namespace id = U N	| empty			
@@ -73,21 +79,22 @@ VB will determine if the nested item is a literal or an unnamed node declaration
 CL processes the literal data within the literal of a predicate.
 
 
-Language
+==Language
 
 local, global, and blank indicate the types of rdf:Description that should be generated.  Local corresponds to an rdf:nodeType; global to rdf:ID, and blank to an unnamed node.  namespace is a keyword to indicate the definition of a namespace.  The rdf namespace is provided by default.
 
 literal indicates a string value; the literal within the U state is a valid URI, the literal in the CL state can be any data, the first literal in the NV state must be either rdf or correspond to a namespace which was defined at the start of the program; the second literal should be a predicate from that ontology.
 
-
 Example inputs are located within the examples folder.
 
+== Systme Requirements
+* Ruby 1.9.3 or 2.0
+* Ruby standard library, notably File, IO, Array and Hash
+* Test suite requires minitest
+* UNIX-like operating system suggested
 
-
-Runtime Requirements
-Requires Ruby 1.9.3 or newer.
-
-
-Execution Instructions
+== Usage
+Run the rdfgen.rb through a ruby interpreter passing a single commandline argument containing the input file. Resulting
+RDF/XML will be returned. View on console or redirect to file or application.
 
 
