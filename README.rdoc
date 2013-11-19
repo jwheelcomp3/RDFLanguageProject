@@ -1,12 +1,15 @@
-RDFLanguageProject
+RDF Language Project
 ==================
+This is an academic project for Dr. Roger Eggen's Programming Languages Paradigms course at the University of North
+Florida.  The assignment involved creating a language of our choosing.  This is the result.  While you are encouraged to
+fork and use this project, it is unmaintained. We'll review pull requests but do not make any guarantees as to the
+production suitability of this application.
 
-Project for Programming Languages Paradigms course creating an interpreted language that generates a subset of RDF/XML.
-
+The program generates a subset RDF/XML from a derived language, referred to as RDF/Osprey Notation.
 
 Authors:
-* Matt Walston
-* Jared Wheeler
+* Matt Walston  <mailto:m@mlw.ac>
+* Jared Wheeler <mailto:m@mlw.ac>
 
 
 Introduction
