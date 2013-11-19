@@ -23,12 +23,15 @@ S ->	A
 A	-> N | D				
 N	-> namespace id = U N	| empty			
 D	-> U B D	| L B D	| G B D	| blank B D	| empty
+
 U	-> ' literal '				
 L	-> local id				
 G	-> global id				
 B	-> { IB }				
 IB	-> NV DC IB	| empty	
+
 NV	-> literal::literal	
+
 DC	-> C	| D			
 C	-> U TM	| T			
 TM	-> T	| empty			
