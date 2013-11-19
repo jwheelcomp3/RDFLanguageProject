@@ -40,19 +40,33 @@ VB -> " CL "	| D
 CL -> literal CL	| empty			
 
 S is the start state.
+
 A encompases the entire program.
+
 N is where all namespace declarations are going to take place.
+
 D is the start of a definition, determining if it will be referencing a preexisting item, a local definition, a global definition, or an unnamed node.
+
 U governs the URI references.
+
 L defines local rdf:nodeType name.
+
 G defines an rdf:ID name.
+
 B indicates the body of the defined resource, surrounded by brackets.
+
 IB is the basic set up for a predicate.
+
 NV is the structure of the namespace and predicate for use.
+
 DC determines if a resource or a sub-defined local item will be connected by the predicate.
+
 C and TM allow the use of a URI for linking to external resource or for use as a rdf:dataType definition with literal data.
+
 T allows a further nesting of items within the predicate, indicated by brackets.
+
 VB will determine if the nested item is a literal or an unnamed node declaration.
+
 CL processes the literal data within the literal of a predicate.
 
 
