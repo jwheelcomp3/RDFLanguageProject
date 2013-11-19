@@ -1,34 +1,53 @@
-# The program generates RDF/XML from an
-# alternate notation known as Osprey
-# Notation.
+# The program generates RDF/XML from an alternate notation
+# known as Osprey Notation.
 #
-# Authors:: Jared Wheeler (mailto:)
-#           Matt Walston  (mailto:m@mlw.ac)
+# Authors::   Jared Wheeler (mailto:jwheelcomp3@gmail.com)
+#             Matt Walston  (mailto:m@mlw.ac)
+# Copyright:: Copywright (c) 2013
+# License::   Creative Commons CC0 -- No Rights Reserved
+
+# This class is a simple commandline driver which validates
+# presence of the input file, parses input, validates and
+# generates resulting RDF/XML
+
 class Driver
+  # Validates single commandline argument as valid filename,
+  # otherwise prints usage or error. Input file stored as
+  # instance variable on class.
   def initialize(arguments)
     usage_and_exit unless arguments.count == 1
     file_not_found_and_exit unless File.exists? arguments.first
 
-    input_file = arguments.first
+    @input_file = arguments.first
+  end
 
-    tokenizer = Tokenizer.new(input_file)
+  # Parse input file and return output to OS
+  def run
+    tokenizer = Tokenizer.new(@input_file)
     parser = Parser.new(tokenizer)
     parser.start
+    exit 0
   end
 
   private
 
+  # Print usage message and exit with code 1
   def usage_and_exit
     puts "Usage: #{__FILE__} source_file"
-    exit(1)
+    exit 1
   end
 
+  # Print file not found error and exit with code 2
   def file_not_found_and_exit
     puts 'Input file not found.'
-    exit(2)
+    exit 2
   end
 end
 
+# This class is a simple tokenizer providing the token's
+# type and content. The next token is retrieved using the
+# get method which advances the IO buffer. It provides
+# lookahead via the peek method which resets the buffer.
 class Tokenizer
   def initialize(filename)
     @io = File.open(filename)
@@ -103,6 +122,8 @@ class Tokenizer
   end
 end
 
+# This class parses the tokenized input echoing output
+# to the console.
 class Parser
   def initialize(tokenizer)
     @tq = tokenizer
@@ -372,4 +393,8 @@ class Parser
   end
 end
 
-Driver.new(ARGV) if __FILE__ == $0
+# Only initialize and run driver when called direct rather than via test suite
+if __FILE__ == $0
+  driver = Driver.new(ARGV)
+  driver.run
+end
