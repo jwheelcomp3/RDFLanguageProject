@@ -30,59 +30,45 @@ the most common RDF elements and offers a great deal of flexibility.
 == Grammar
 
   start_state           = program
-  program               = [namespace declaration], line break, definition
+  program               = [namespace declaration, [line break]], definition
   namespace declaration = 'namespace', white space, identifier, [white space], '=', [white space], uri reference,
                           [line break namespace decleration]
-S ->	A				
-A	-> N | D				
-N	-> namespace id = U N	| empty			
-D	-> U B D	| L B D	| G B D	| blank B D	| empty
 
-U	-> ' literal '				
-L	-> local id				
-G	-> global id				
-B	-> { IB }				
-IB	-> NV DC IB	| empty	
+  S   -> A
+  A	  -> N | D
+  N   -> namespace id = U N	| empty
+  D   -> U B D	| L B D	| G B D	| blank B D	| empty
 
-NV	-> literal::literal	
+  U	  -> ' literal '
+  L   -> local id
+  G   -> global id
+  B   -> { IB }
+  IB  -> NV DC IB	| empty
 
-DC	-> C	| D			
-C	-> U TM	| T			
-TM	-> T	| empty			
-T	-> { VB }				
-VB -> " CL "	| D			
-CL -> literal CL	| empty			
+  NV  -> literal::literal
 
-S is the start state.
+  DC  -> C	| D
+  C	  -> U TM	| T
+  TM  -> T	| empty
+  T	  -> { VB }
+  VB  -> " CL "	| D
+  CL  -> literal CL	| empty
 
-A encompases the entire program.
-
-N is where all namespace declarations are going to take place.
-
-D is the start of a definition, determining if it will be referencing a preexisting item, a local definition, a global definition, or an unnamed node.
-
-U governs the URI references.
-
-L defines local rdf:nodeType name.
-
-G defines an rdf:ID name.
-
-B indicates the body of the defined resource, surrounded by brackets.
-
-IB is the basic set up for a predicate.
-
-NV is the structure of the namespace and predicate for use.
-
-DC determines if a resource or a sub-defined local item will be connected by the predicate.
-
-C and TM allow the use of a URI for linking to external resource or for use as a rdf:dataType definition with literal data.
-
-T allows a further nesting of items within the predicate, indicated by brackets.
-
-VB will determine if the nested item is a literal or an unnamed node declaration.
-
-CL processes the literal data within the literal of a predicate.
-
+[S]  is the start state.
+[A]  encompases the entire program.
+[N]  is where all namespace declarations are going to take place.
+[D]  is the start of a definition, determining if it will be referencing a preexisting item, a local definition, a global definition, or an unnamed node.
+[U]  governs the URI references.
+[L]  defines local rdf:nodeType name.
+[G]  defines an rdf:ID name.
+[B]  indicates the body of the defined resource, surrounded by brackets.
+[IB] is the basic set up for a predicate.
+[NV] is the structure of the namespace and predicate for use.
+[DC] determines if a resource or a sub-defined local item will be connected by the predicate.
+[C]  and TM allow the use of a URI for linking to external resource or for use as a rdf:dataType definition with literal data.
+[T]  allows a further nesting of items within the predicate, indicated by brackets.
+[VB] will determine if the nested item is a literal or an unnamed node declaration.
+[CL] processes the literal data within the literal of a predicate.
 
 ==Language
 
