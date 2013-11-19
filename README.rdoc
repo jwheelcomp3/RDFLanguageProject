@@ -29,10 +29,10 @@ the most common RDF elements and offers a great deal of flexibility.
 
 == Grammar
 
-start_state           = program
-program               = [namespace declaration], line break, definition
-namespace declaration = 'namespace', white space, identifier, [white space], '=', [white space], uri reference,
-                        [line break namespace decleration]
+  start_state           = program
+  program               = [namespace declaration], line break, definition
+  namespace declaration = 'namespace', white space, identifier, [white space], '=', [white space], uri reference,
+                          [line break namespace decleration]
 S ->	A				
 A	-> N | D				
 N	-> namespace id = U N	| empty			
