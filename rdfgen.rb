@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # The program generates RDF/XML from an alternate notation
 # known as Osprey Notation.
