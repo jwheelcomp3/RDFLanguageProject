@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 # The program generates RDF/XML from an alternate notation
 # known as Osprey Notation.
 #
